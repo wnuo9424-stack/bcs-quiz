@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MY BOSCH Membership — June 2026 Staff Assessment</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1A2F4E;
+    --red: #E20015;
+    --white: #ffffff;
+    --bg: #f5f5f5;
+    --card-bg: #ffffff;
+    --border: #e0e0e0;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555f6e;
+    --text-tertiary: #999;
+    --success-bg: #e4f5ec;
+    --success-border: #5dcaa5;
+    --success-text: #085041;
+    --danger-bg: #fcebeb;
+    --danger-border: #f09595;
+    --danger-text: #791f1f;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── HEADER BADGE ── */
+  .bcs-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    padding: 4px 10px;
+    border-radius: var(--radius-md);
+    margin-bottom: .75rem;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s;
+    text-decoration: none;
+  }
+  .btn:hover { background: #f0f0f0; }
+  .btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .btn.primary:hover { background: #0f1d32; }
+
+  /* ── LANGUAGE BUTTONS ── */
+  .lang-wrap {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 1.5rem 2.5rem;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    cursor: pointer;
+    transition: all .2s;
+    min-width: 160px;
+    font-family: inherit;
+  }
+  .lang-btn:hover { border-color: var(--navy); background: #f5f8ff; }
+  .lang-btn .flag { font-size: 2.5rem; }
+  .lang-btn .lname { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .lang-btn .lsub { font-size: 12px; color: var(--text-secondary); }
+
+  /* ── FORM ── */
+  .form-group { display: flex; flex-direction: column; gap: 14px; }
+  label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
+  input[type=text], select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+  }
+  input[type=text]:focus, select:focus { outline: none; border-color: var(--navy); }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    height: 5px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--navy);
+    border-radius: 3px;
+    transition: width .3s;
+  }
+
+  /* ── QUIZ OPTIONS ── */
+  .tag-pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--radius-md);
+    background: #f0f0f0;
+    color: var(--text-secondary);
+    border: 0.5px solid var(--border);
+    margin-bottom: .75rem;
+  }
+
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: all .15s;
+    background: var(--card-bg);
+  }
+  .opt:hover:not(.disabled) { border-color: var(--navy); background: #f5f8ff; }
+  .opt.correct  { border-color: #1A7A4A; background: #e4f5ec; }
+  .opt.wrong    { border-color: var(--red); background: #fcebeb; }
+  .opt.show-correct { border-color: #1A7A4A; background: #e4f5ec; }
+  .opt.disabled { cursor: default; }
+
+  .opt-radio {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+  }
+  .opt.correct .opt-radio  { border-color: #1A7A4A; background: #1A7A4A; }
+  .opt.wrong .opt-radio    { border-color: var(--red); background: var(--red); }
+  .opt.show-correct .opt-radio { border-color: #1A7A4A; background: #1A7A4A; }
+  .opt-radio::after {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    display: none;
+  }
+  .opt.correct .opt-radio::after,
+  .opt.wrong .opt-radio::after,
+  .opt.show-correct .opt-radio::after { display: block; }
+  .opt-text { font-size: 14px; color: var(--text-primary); line-height: 1.45; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    margin-bottom: 1rem;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .feedback.correct { background: var(--success-bg); border: 0.5px solid var(--success-border); color: var(--success-text); }
+  .feedback.wrong   { background: var(--danger-bg);  border: 0.5px solid var(--danger-border);  color: var(--danger-text); }
+
+  /* ── RESULT ── */
+  .result-circle {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    border: 6px solid #ccc;
+  }
+
+  /* ── REVIEW ── */
+  .review-item {
+    border: 0.5px solid var(--border);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .review-item.r-correct { border-left: 3px solid #1A7A4A; }
+  .review-item.r-wrong   { border-left: 3px solid var(--red); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid;
+  }
+  .badge-meta { background: #f0f0f0; color: var(--text-secondary); border-color: var(--border); }
+  .badge-ok   { background: #e4f5ec; color: #085041; border-color: #5dcaa5; }
+  .badge-err  { background: #fcebeb; color: #791f1f; border-color: #f09595; }
+
+  /* ── ERROR BOX ── */
+  .err-box {
+    display: none;
+    font-size: 13px;
+    color: var(--danger-text);
+    padding: 8px 12px;
+    background: var(--danger-bg);
+    border: 0.5px solid var(--danger-border);
+    border-radius: var(--radius-md);
+  }
+
+  /* ── UTILS ── */
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: .75rem; }
+  .mt-2 { margin-top: 1.5rem; }
+  .mb-1 { margin-bottom: .75rem; }
+  .mb-2 { margin-bottom: 1.5rem; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; }
+  .flex-end { display: flex; justify-content: flex-end; }
+  .flex-center { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .text-muted { color: var(--text-secondary); }
+  .text-sm { font-size: 13px; }
+  .text-xs { font-size: 11px; }
+  .fw-500 { font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ── LANGUAGE SELECTION ───────────────────────────────────────────── -->
+  <div id="s-lang" class="screen active" style="padding:2rem 0;text-align:center">
+    <span class="bcs-badge">BOSCH CAR SERVICE</span>
+    <h1 style="font-size:24px;font-weight:600;margin-bottom:.4rem">MY BOSCH Membership</h1>
+    <p class="text-muted mb-2">June 2026 Benefits — Staff Assessment</p>
+    <div class="lang-wrap">
+      <button class="lang-btn" onclick="setLang('en')">
+        <span class="flag">🇬🇧</span>
+        <span class="lname">English</span>
+        <span class="lsub">Take test in English</span>
+      </button>
+      <button class="lang-btn" onclick="setLang('id')">
+        <span class="flag">🇮🇩</span>
+        <span class="lname">Bahasa Indonesia</span>
+        <span class="lsub">Ikuti tes dalam Bahasa</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STAFF INFO ────────────────────────────────────────────────────── -->
+  <div id="s-info" class="screen" style="padding:2rem 0;max-width:480px;margin:0 auto">
+    <h2 style="font-size:20px;font-weight:600;" class="mb-2" id="info-title">Your Information</h2>
+    <div class="form-group">
+      <div><label id="lbl-name">Full Name *</label><input type="text" id="f-name" placeholder="e.g. Ahmad Fauzi"></div>
+      <div>
+        <label id="lbl-role">Job Title *</label>
+        <select id="f-role">
+          <option value="">-- Select --</option>
+          <option>SA (Service Advisor)</option>
+          <option>CRO (Customer Relation Officer)</option>
+          <option>Reception</option>
+          <option>Technician</option>
+          <option>Workshop Manager</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label id="lbl-ws">Workshop</label>
+        <select id="f-ws">
+          <option value="Kelapa Gading">Kelapa Gading Flagship</option>
+          <option value="PIK2">PIK2</option>
+        </select>
+      </div>
+      <div class="err-box" id="info-err"></div>
+      <button class="btn primary" onclick="startQuiz()" id="btn-start" style="width:100%;justify-content:center">
+        Start Test <i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── QUIZ ──────────────────────────────────────────────────────────── -->
+  <div id="s-quiz" class="screen" style="padding:1.5rem 0;max-width:640px;margin:0 auto">
+    <div class="mb-1">
+      <div class="flex-between" style="margin-bottom:4px">
+        <span class="text-sm text-muted" id="q-counter"></span>
+        <span class="text-sm fw-500" id="q-score-live"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="q-progress" style="width:5%"></div></div>
+    </div>
+    <div class="card mb-1">
+      <div class="tag-pill" id="q-tag"></div>
+      <p style="font-size:15px;font-weight:500;line-height:1.55" id="q-text"></p>
+    </div>
+    <div id="q-opts"></div>
+    <div class="feedback" id="q-feedback"></div>
+    <div class="flex-end">
+      <button class="btn primary" id="btn-next" onclick="nextQ()" style="display:none"></button>
+    </div>
+  </div>
+
+  <!-- ── RESULTS ───────────────────────────────────────────────────────── -->
+  <div id="s-result" class="screen" style="padding:2rem 0;max-width:600px;margin:0 auto">
+    <div class="text-center mb-2">
+      <div class="result-circle" id="result-circle">
+        <span style="font-size:36px;font-weight:600" id="result-pct"></span>
+        <span class="text-xs text-muted" id="result-frac"></span>
+      </div>
+      <h2 style="font-size:22px;font-weight:600" class="mb-1" id="result-grade"></h2>
+      <p class="text-muted mb-1" id="result-msg"></p>
+      <div class="flex-center" id="result-meta"></div>
+    </div>
+    <h3 style="font-size:15px;font-weight:600" class="mb-1" id="review-title"></h3>
+    <div id="review-list"></div>
+    <div class="text-center mt-2">
+      <button class="btn" onclick="restart()" id="btn-restart"></button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const T={
+  en:{
+    infoTitle:"Your Information",lblName:"Full Name *",lblRole:"Job Title *",lblWs:"Workshop",
+    errName:"Please enter your full name.",errRole:"Please select your job title.",
+    btnStart:"Start Test",scoreLbl:"Score:",reviewTitle:"Answer Review",
+    yourAns:"Your answer:",correctAns:"Correct answer:",btnRestart:"Retake Test",
+    grades:{A:"Excellent!",B:"Good Work",C:"Needs Review",D:"Please Re-Study"},
+    msgs:{
+      A:"You have a strong grasp of the June member benefits. Well done!",
+      B:"Good overall. Check the items you got wrong and you'll be ready.",
+      C:"A few gaps found. Please review the June benefits document before serving customers.",
+      D:"Please re-read the June membership benefits guide before your next attempt."
+    }
+  },
+  id:{
+    infoTitle:"Informasi Peserta",lblName:"Nama Lengkap *",lblRole:"Jabatan *",lblWs:"Workshop",
+    errName:"Harap masukkan nama lengkap Anda.",errRole:"Harap pilih jabatan Anda.",
+    btnStart:"Mulai Tes",scoreLbl:"Skor:",reviewTitle:"Tinjauan Jawaban",
+    yourAns:"Jawaban Anda:",correctAns:"Jawaban benar:",btnRestart:"Ulangi Tes",
+    grades:{A:"Luar Biasa!",B:"Bagus",C:"Perlu Ditinjau",D:"Harap Dipelajari Ulang"},
+    msgs:{
+      A:"Anda memahami benefit member Juni dengan sangat baik. Pertahankan!",
+      B:"Pengetahuan Anda cukup baik. Tinjau soal yang salah.",
+      C:"Ada beberapa celah. Harap baca ulang dokumen benefit Juni sebelum melayani pelanggan.",
+      D:"Harap pelajari kembali panduan benefit keanggotaan Juni sebelum mencoba lagi."
+    }
+  }
+};
+
+const Q=[
+  {cat:{en:"Engine Oil",id:"Oli Mesin"},
+   en:{q:"What discount does a member receive on engine oil change (oil only) in June?",opts:["10% off","15% off","20% off","25% off"],a:1},
+   id:{q:"Berapa diskon yang didapat member untuk ganti oli mesin (oli saja) di bulan Juni?",opts:["Diskon 10%","Diskon 15%","Diskon 20%","Diskon 25%"],a:1},
+   fb:{en:"Members get 15% off engine oil only. Labour is NOT included.",id:"Member mendapat diskon 15% untuk oli saja. Biaya jasa TIDAK termasuk."}},
+
+  {cat:{en:"Engine Oil",id:"Oli Mesin"},
+   en:{q:"The engine oil member voucher covers which part of the bill?",opts:["Labour cost only","Oil cost only","Oil + labour combined","Full oil change package"],a:1},
+   id:{q:"Voucher member oli mesin berlaku untuk bagian mana dari tagihan?",opts:["Biaya jasa saja","Biaya oli saja","Oli + jasa gabungan","Paket ganti oli lengkap"],a:1},
+   fb:{en:"The voucher covers oil cost only — labour is excluded.",id:"Voucher hanya berlaku untuk biaya oli — biaya jasa tidak termasuk."}},
+
+  {cat:{en:"Engine Oil",id:"Oli Mesin"},
+   en:{q:"Can the engine oil discount voucher be combined with a separate engine oil promotion currently running at BCS?",opts:["Yes, always","Only for Plus/Premium members","No, it cannot be combined with other engine oil promotions","Only if the bill is over Rp 500,000"],a:2},
+   id:{q:"Bisakah voucher diskon oli mesin digabungkan dengan promo oli mesin lain yang sedang berjalan di BCS?",opts:["Ya, selalu bisa","Hanya untuk member Plus/Premium","Tidak, tidak bisa digabungkan dengan promo oli mesin lainnya","Hanya jika tagihan di atas Rp 500.000"],a:2},
+   fb:{en:"The oil voucher cannot be combined with any other engine oil promotion — two discounts on the same product are not allowed.",id:"Voucher oli tidak bisa digabungkan dengan promosi oli mesin lainnya — dua diskon untuk produk yang sama tidak diperbolehkan."}},
+
+  {cat:{en:"AC Refrigerant",id:"Freon AC"},
+   en:{q:"What discount does a member receive on AC refrigerant top-up in June?",opts:["10% off","15% off","20% off","30% off"],a:1},
+   id:{q:"Berapa diskon yang didapat member untuk isi ulang freon AC di bulan Juni?",opts:["Diskon 10%","Diskon 15%","Diskon 20%","Diskon 30%"],a:1},
+   fb:{en:"Members get 15% off AC refrigerant top-up in June (reduced from 30% in May).",id:"Member mendapat diskon 15% untuk freon AC di Juni (turun dari 30% di Mei)."}},
+
+  {cat:{en:"AC Refrigerant",id:"Freon AC"},
+   en:{q:"For the AC refrigerant voucher to be valid, where must the freon be purchased from?",opts:["Any auto parts store","Any brand the customer prefers","BCS workshop only","Imported brands only"],a:2},
+   id:{q:"Agar voucher freon AC berlaku, freon harus dibeli di mana?",opts:["Toko suku cadang mana saja","Merek apa saja pilihan pelanggan","Workshop BCS saja","Hanya merek impor"],a:2},
+   fb:{en:"The freon must be purchased from BCS for the voucher to apply.",id:"Freon harus dibeli dari BCS agar voucher berlaku."}},
+
+  {cat:{en:"Transmission Oil",id:"Oli Transmisi"},
+   en:{q:"What discount does a member receive on transmission oil change in June?",opts:["10% off","15% off","20% off","30% off"],a:2},
+   id:{q:"Berapa diskon yang didapat member untuk ganti oli transmisi di bulan Juni?",opts:["Diskon 10%","Diskon 15%","Diskon 20%","Diskon 30%"],a:2},
+   fb:{en:"Members get 20% off transmission oil change in June.",id:"Member mendapat diskon 20% untuk ganti oli transmisi di Juni."}},
+
+  {cat:{en:"Transmission Oil",id:"Oli Transmisi"},
+   en:{q:"A customer wants to use both the engine oil voucher and the transmission oil voucher in the same visit. Is this allowed?",opts:["No, only one voucher per visit","No, oil-related vouchers can never be combined","Yes, because they are for different products","Yes, but only for Plus or Premium members"],a:2},
+   id:{q:"Pelanggan ingin menggunakan voucher oli mesin dan voucher oli transmisi dalam kunjungan yang sama. Apakah ini diperbolehkan?",opts:["Tidak, hanya satu voucher per kunjungan","Tidak, voucher terkait oli tidak pernah bisa digabungkan","Ya, karena keduanya untuk produk yang berbeda","Ya, tapi hanya untuk member Plus atau Premium"],a:2},
+   fb:{en:"Yes — different products can each have their own voucher applied. The rule is that you cannot stack two promotions on the same product.",id:"Ya — produk yang berbeda boleh masing-masing menggunakan vouchernya. Aturannya adalah Anda tidak boleh menggabungkan dua promosi untuk produk yang sama."}},
+
+  {cat:{en:"Battery (Aki)",id:"Aki"},
+   en:{q:"What discount does a member receive on battery (aki) purchase in June?",opts:["5% off","10% off","15% off","20% off"],a:1},
+   id:{q:"Berapa diskon yang didapat member untuk pembelian aki di bulan Juni?",opts:["Diskon 5%","Diskon 10%","Diskon 15%","Diskon 20%"],a:1},
+   fb:{en:"Members get 10% off battery purchase in June (reduced from 20% in May).",id:"Member mendapat diskon 10% untuk pembelian aki di Juni (turun dari 20% di Mei)."}},
+
+  {cat:{en:"Battery (Aki)",id:"Aki"},
+   en:{q:"A customer brings their own battery bought elsewhere and asks for the member battery discount. Is the voucher valid?",opts:["Yes, voucher applies to any battery","No, the battery must be purchased from BCS","Only if the brand is available at BCS","Yes, but only 5% applies"],a:1},
+   id:{q:"Pelanggan membawa aki yang dibeli dari luar dan meminta diskon aki member. Apakah voucher berlaku?",opts:["Ya, voucher berlaku untuk aki apa saja","Tidak, aki harus dibeli dari BCS","Hanya jika mereknya tersedia di BCS","Ya, tapi hanya diskon 5%"],a:1},
+   fb:{en:"The battery voucher is only valid for batteries purchased from BCS.",id:"Voucher aki hanya berlaku untuk aki yang dibeli dari BCS."}},
+
+  {cat:{en:"Tire",id:"Ban"},
+   en:{q:"What discount does a member receive on tire purchase in June?",opts:["5% off","8% off","10% off","15% off"],a:2},
+   id:{q:"Berapa diskon yang didapat member untuk pembelian ban di bulan Juni?",opts:["Diskon 5%","Diskon 8%","Diskon 10%","Diskon 15%"],a:2},
+   fb:{en:"Members get 10% off tire purchase in June.",id:"Member mendapat diskon 10% untuk pembelian ban di Juni."}},
+
+  {cat:{en:"Tire",id:"Ban"},
+   en:{q:"Can a member stack the tire discount voucher with a separate tire promotion currently running at BCS?",opts:["Yes, always stackable","No, cannot be combined with other tire promotions","Only if spending over Rp 1,000,000","Only for Premium members"],a:1},
+   id:{q:"Bisakah member menggabungkan voucher diskon ban dengan promo ban lain yang sedang berjalan di BCS?",opts:["Ya, selalu bisa digabungkan","Tidak, tidak bisa digabung dengan promo ban lainnya","Hanya jika belanja di atas Rp 1.000.000","Hanya untuk member Premium"],a:1},
+   fb:{en:"The tire voucher cannot be combined with any other ongoing tire promotions.",id:"Voucher ban tidak bisa digabungkan dengan promosi ban lain yang sedang berjalan."}},
+
+  {cat:{en:"Standard Car Wash",id:"Cuci Mobil Standar"},
+   en:{q:"What is the member price for Standard Car Wash in June?",opts:["Rp 29,000","Rp 39,000","Rp 49,000","Free with points"],a:2},
+   id:{q:"Berapa harga member untuk Cuci Mobil Standar di bulan Juni?",opts:["Rp 29.000","Rp 39.000","Rp 49.000","Gratis dengan poin"],a:2},
+   fb:{en:"Standard Car Wash member price is Rp 49,000 (normal price Rp 69,000).",id:"Harga member Cuci Mobil Standar adalah Rp 49.000 (harga normal Rp 69.000)."}},
+
+  {cat:{en:"Standard Car Wash",id:"Cuci Mobil Standar"},
+   en:{q:"What is the normal (non-member) price of Standard Car Wash?",opts:["Rp 39,000","Rp 49,000","Rp 59,000","Rp 69,000"],a:3},
+   id:{q:"Berapa harga normal (non-member) Cuci Mobil Standar?",opts:["Rp 39.000","Rp 49.000","Rp 59.000","Rp 69.000"],a:3},
+   fb:{en:"Normal price is Rp 69,000. Members pay only Rp 49,000.",id:"Harga normal adalah Rp 69.000. Member hanya membayar Rp 49.000."}},
+
+  {cat:{en:"Cash Vouchers",id:"Voucher Tunai"},
+   en:{q:"What are the three cash voucher values available for members in June?",opts:["Rp 10k / Rp 30k / Rp 50k","Rp 20k / Rp 50k / Rp 100k","Rp 20k / Rp 50k / Rp 120k","Rp 30k / Rp 75k / Rp 150k"],a:2},
+   id:{q:"Apa saja tiga nilai voucher tunai yang tersedia untuk member di bulan Juni?",opts:["Rp 10rb / Rp 30rb / Rp 50rb","Rp 20rb / Rp 50rb / Rp 100rb","Rp 20rb / Rp 50rb / Rp 120rb","Rp 30rb / Rp 75rb / Rp 150rb"],a:2},
+   fb:{en:"The three June cash voucher values are Rp 20,000 / Rp 50,000 / Rp 120,000.",id:"Tiga nilai voucher tunai Juni adalah Rp 20.000 / Rp 50.000 / Rp 120.000."}},
+
+  {cat:{en:"Cash Vouchers",id:"Voucher Tunai"},
+   en:{q:"A member's total bill is Rp 40,000 and they want to use the Rp 20,000 cash voucher. Can they?",opts:["Yes, no minimum spend required","Yes, but only Rp 10,000 will be deducted","No, minimum spend of Rp 50,000 is required","No, cash vouchers require a minimum of Rp 100,000"],a:2},
+   id:{q:"Total tagihan member adalah Rp 40.000 dan mereka ingin menggunakan voucher tunai Rp 20.000. Bisa?",opts:["Ya, tidak ada minimum pembelanjaan","Ya, tapi hanya dipotong Rp 10.000","Tidak, diperlukan minimum pembelanjaan Rp 50.000","Tidak, voucher tunai membutuhkan minimum Rp 100.000"],a:2},
+   fb:{en:"The Rp 20k cash voucher requires a minimum spend of Rp 50,000. A bill of Rp 40,000 does not qualify.",id:"Voucher tunai Rp 20rb memerlukan minimum pembelanjaan Rp 50.000. Tagihan Rp 40.000 tidak memenuhi syarat."}},
+
+  {cat:{en:"Cash Vouchers",id:"Voucher Tunai"},
+   en:{q:"Can cash vouchers be combined with other ongoing promotions at BCS?",opts:["No, never","Yes, they can be combined with other promotions","Only the Rp 20k voucher can be combined","Only for service items, not spare parts"],a:1},
+   id:{q:"Apakah voucher tunai bisa digabungkan dengan promo lain yang sedang berjalan di BCS?",opts:["Tidak, tidak pernah","Ya, bisa digabungkan dengan promosi lain","Hanya voucher Rp 20rb yang bisa digabung","Hanya untuk servis, bukan suku cadang"],a:1},
+   fb:{en:"All cash vouchers can be combined with other ongoing promotions.",id:"Semua voucher tunai bisa digabungkan dengan promosi lain yang sedang berjalan."}},
+
+  {cat:{en:"Cash Vouchers",id:"Voucher Tunai"},
+   en:{q:"What is the minimum spend to use the Rp 50,000 cash voucher?",opts:["Rp 100,000","Rp 300,000","Rp 500,000","No minimum spend"],a:2},
+   id:{q:"Berapa minimum pembelanjaan untuk menggunakan voucher tunai Rp 50.000?",opts:["Rp 100.000","Rp 300.000","Rp 500.000","Tidak ada minimum"],a:2},
+   fb:{en:"Minimum spend for the Rp 50k voucher is Rp 500,000.",id:"Minimum pembelanjaan untuk voucher Rp 50rb adalah Rp 500.000."}},
+
+  {cat:{en:"Cash Vouchers",id:"Voucher Tunai"},
+   en:{q:"What is the minimum spend to use the Rp 120,000 cash voucher?",opts:["Rp 500,000","Rp 750,000","Rp 1,000,000","Rp 1,500,000"],a:2},
+   id:{q:"Berapa minimum pembelanjaan untuk menggunakan voucher tunai Rp 120.000?",opts:["Rp 500.000","Rp 750.000","Rp 1.000.000","Rp 1.500.000"],a:2},
+   fb:{en:"Minimum spend for the Rp 120k voucher is Rp 1,000,000.",id:"Minimum pembelanjaan untuk voucher Rp 120rb adalah Rp 1.000.000."}},
+
+  {cat:{en:"General Rules",id:"Ketentuan Umum"},
+   en:{q:"When do all June member vouchers expire?",opts:["June 15, 2026","June 20, 2026","June 30, 2026","July 31, 2026"],a:2},
+   id:{q:"Kapan semua voucher member Juni berakhir?",opts:["15 Juni 2026","20 Juni 2026","30 Juni 2026","31 Juli 2026"],a:2},
+   fb:{en:"All June vouchers expire on June 30, 2026.",id:"Semua voucher Juni berakhir pada 30 Juni 2026."}},
+
+  {cat:{en:"General Rules",id:"Ketentuan Umum"},
+   en:{q:"A customer is a BCS member and wants their discount applied today. What must they do to receive it?",opts:["Just verbally mention they are a member","Show a screenshot of their membership profile","Redeem the relevant voucher via the membership app and present the code at the counter","Call BCS customer service to activate the discount"],a:2},
+   id:{q:"Pelanggan adalah member BCS dan ingin diskon diterapkan hari ini. Apa yang harus mereka lakukan?",opts:["Cukup menyebutkan bahwa mereka adalah member","Menunjukkan screenshot profil keanggotaan mereka","Menukarkan voucher yang relevan lewat aplikasi keanggotaan dan menunjukkan kode di counter","Menghubungi customer service BCS untuk mengaktifkan diskon"],a:2},
+   fb:{en:"Members must redeem the voucher via the membership app and show the redemption code at the counter.",id:"Member harus menukarkan voucher lewat aplikasi keanggotaan dan menunjukkan kode penukaran di counter."}},
+
+  {cat:{en:"General Rules",id:"Ketentuan Umum"},
+   en:{q:"Which of the following correctly describes the voucher stacking rule?",opts:["No vouchers can ever be combined with anything","Two vouchers for the same product can be used together","Vouchers for different products can each be applied, but two discounts on the same product are not allowed","All vouchers can be freely stacked without any limit"],a:2},
+   id:{q:"Mana yang benar menggambarkan aturan penggabungan voucher?",opts:["Tidak ada voucher yang boleh digabungkan dengan apapun","Dua voucher untuk produk yang sama bisa digunakan bersama","Voucher untuk produk berbeda masing-masing bisa diterapkan, tapi dua diskon untuk produk yang sama tidak diperbolehkan","Semua voucher bisa digabungkan bebas tanpa batasan"],a:2},
+   fb:{en:"Correct — different-product vouchers can both apply. What's not allowed is stacking two promotions on the same product.",id:"Benar — voucher untuk produk berbeda boleh masing-masing diterapkan. Yang tidak diperbolehkan adalah menggabungkan dua promosi untuk produk yang sama."}}
+];
+
+let lang='en',curQ=0,score=0,answers=[],uName='',uRole='',uWs='';
+
+function setLang(l){
+  lang=l;const t=T[l];
+  document.getElementById('info-title').textContent=t.infoTitle;
+  document.getElementById('lbl-name').textContent=t.lblName;
+  document.getElementById('lbl-role').textContent=t.lblRole;
+  document.getElementById('lbl-ws').textContent=t.lblWs;
+  document.getElementById('btn-start').innerHTML=t.btnStart+' <i class="ti ti-arrow-right"></i>';
+  show('s-info');
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz(){
+  const n=document.getElementById('f-name').value.trim();
+  const r=document.getElementById('f-role').value;
+  const err=document.getElementById('info-err');
+  if(!n){err.textContent=T[lang].errName;err.style.display='block';return;}
+  if(!r){err.textContent=T[lang].errRole;err.style.display='block';return;}
+  err.style.display='none';
+  uName=n;uRole=r;uWs=document.getElementById('f-ws').value;
+  curQ=0;score=0;answers=[];show('s-quiz');renderQ();
+}
+
+function renderQ(){
+  const q=Q[curQ];const total=Q.length;const ql=q[lang];
+  document.getElementById('q-counter').textContent=(lang==='id'?'Soal':'Question')+' '+(curQ+1)+' '+(lang==='id'?'dari':'of')+' '+total;
+  document.getElementById('q-score-live').textContent=T[lang].scoreLbl+' '+score;
+  document.getElementById('q-tag').textContent=q.cat[lang];
+  document.getElementById('q-text').textContent=ql.q;
+  document.getElementById('q-progress').style.width=(((curQ+1)/total)*100)+'%';
+  document.getElementById('q-feedback').style.display='none';
+  document.getElementById('q-feedback').className='feedback';
+  document.getElementById('btn-next').style.display='none';
+  const el=document.getElementById('q-opts');el.innerHTML='';
+  ql.opts.forEach((o,i)=>{
+    const d=document.createElement('div');d.className='opt';
+    d.innerHTML='<div class="opt-radio"></div><span class="opt-text">'+o+'</span>';
+    d.onclick=()=>pick(i);el.appendChild(d);
+  });
+}
+
+function pick(i){
+  const q=Q[curQ];const correct=i===q[lang].a;
+  document.querySelectorAll('#q-opts .opt').forEach(o=>o.classList.add('disabled'));
+  document.querySelectorAll('#q-opts .opt')[i].classList.add(correct?'correct':'wrong');
+  if(!correct)document.querySelectorAll('#q-opts .opt')[q[lang].a].classList.add('show-correct');
+  if(correct)score++;
+  answers.push({qi:curQ,chosen:i,correct});
+  const fb=document.getElementById('q-feedback');
+  fb.style.display='block';
+  fb.className='feedback '+(correct?'correct':'wrong');
+  fb.textContent=(correct?(lang==='id'?'Benar! ':'Correct! '):(lang==='id'?'Salah. ':'Incorrect. '))+q.fb[lang];
+  document.getElementById('q-score-live').textContent=T[lang].scoreLbl+' '+score;
+  const btn=document.getElementById('btn-next');
+  btn.style.display='inline-flex';
+  btn.innerHTML=(curQ<Q.length-1?(lang==='id'?'Lanjut':'Next'):(lang==='id'?'Lihat Hasil':'See Results'))+' <i class="ti ti-arrow-right"></i>';
+}
+
+function nextQ(){if(curQ<Q.length-1){curQ++;renderQ();}else{showResult();}}
+
+function showResult(){
+  show('s-result');
+  const total=Q.length;const pct=Math.round((score/total)*100);
+  let grade,color;
+  if(pct>=90){grade='A';color='#1A7A4A';}
+  else if(pct>=75){grade='B';color='#2E75B6';}
+  else if(pct>=60){grade='C';color='#D97706';}
+  else{grade='D';color='#E20015';}
+  const rc=document.getElementById('result-circle');
+  rc.style.borderColor=color;
+  document.getElementById('result-pct').textContent=pct+'%';
+  document.getElementById('result-pct').style.color=color;
+  document.getElementById('result-frac').textContent=score+'/'+total;
+  document.getElementById('result-grade').textContent=T[lang].grades[grade];
+  document.getElementById('result-msg').textContent=T[lang].msgs[grade];
+  document.getElementById('result-meta').innerHTML=
+    '<span class="badge badge-meta"><i class="ti ti-user"></i> '+uName+'</span>'+
+    '<span class="badge badge-meta">'+uRole+'</span>'+
+    '<span class="badge badge-meta">'+uWs+'</span>';
+  document.getElementById('review-title').textContent=T[lang].reviewTitle;
+  document.getElementById('btn-restart').textContent=T[lang].btnRestart;
+  const rl=document.getElementById('review-list');rl.innerHTML='';
+  answers.forEach((a,idx)=>{
+    const q=Q[a.qi];const ql=q[lang];
+    const div=document.createElement('div');
+    div.className='review-item '+(a.correct?'r-correct':'r-wrong');
+    div.innerHTML=
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">'+
+        '<div style="flex:1"><span style="font-size:11px;color:var(--text-tertiary)">'+(idx+1)+'. '+q.cat[lang]+'</span>'+
+        '<p style="font-size:13px;font-weight:500;line-height:1.45;margin-top:2px">'+ql.q+'</p></div>'+
+        '<span class="badge '+(a.correct?'badge-ok':'badge-err')+'">'+(a.correct?'✓':'✗')+'</span>'+
+      '</div>'+
+      (a.correct
+        ?'<p style="font-size:12px;color:#085041">'+ql.opts[a.chosen]+'</p>'
+        :'<p style="font-size:12px;color:var(--text-secondary);margin-bottom:2px">'+T[lang].yourAns+' <span style="color:#791f1f">'+ql.opts[a.chosen]+'</span></p>'+
+         '<p style="font-size:12px;color:var(--text-secondary)">'+T[lang].correctAns+' <span style="color:#085041;font-weight:500">'+ql.opts[ql.a]+'</span></p>'
+      );
+    rl.appendChild(div);
+  });
+}
+
+function restart(){
+  show('s-lang');curQ=0;score=0;answers=[];
+  document.getElementById('f-name').value='';
+  document.getElementById('f-role').value='';
+}
+</script>
+</body>
+</html>
